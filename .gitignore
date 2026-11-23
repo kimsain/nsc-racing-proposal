@@ -1,3 +1,6 @@
 .tmp/
 .vercel/
 generated-images/
+
+.vercel
+.env*
