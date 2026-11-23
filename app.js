@@ -1,286 +1,500 @@
 const GLOSSARY = [
-  { k: "GSM", full: "grams per square meter", dir: "↓ 낮을수록 가볍다", body: "원단 1㎡의 무게. 레이스 싱글렛은 80~110, 겨울 미드레이어는 180~250 정도. 같은 소재라면 무게·두께·보온을 가장 빠르게 가늠하는 숫자.", scale: ["~110 레이스", "~160 트레이닝", "~250 보온"] },
-  { k: "CFM", full: "air permeability · ASTM D737", dir: "↑ 높을수록 바람이 통한다", body: "1 ft² 면적을 1분 동안 통과하는 공기량. 싱글렛은 높을수록 시원하고, 바람막이는 낮을수록 바람을 막는다. 용도에 따라 '좋은 값'이 반대.", scale: ["<5 방풍", "~60 균형", "300+ 메쉬"] },
-  { k: "MVTR", full: "moisture vapor transmission · g/m²/24h", dir: "↑ 높을수록 땀 증기가 빠진다", body: "원단이 하루 동안 내보내는 수증기 양. 숫자가 클수록 속이 덜 꿉꿉하다. 쉘과 레이스 상의 비교에 특히 유용.", scale: ["<8k 답답", "~15k 양호", "20k+ 우수"] },
-  { k: "RET", full: "evaporative resistance · ISO 11092", dir: "↓ 낮을수록 숨을 잘 쉰다", body: "땀이 증발할 때 원단이 거는 저항. 0~6이면 '매우 잘 통함', 13 이상이면 고강도 러닝엔 덥다. MVTR보다 실제 체감에 가깝다.", scale: ["0–6 최상", "6–13 양호", "13+ 둔함"] },
-  { k: "CLO", full: "thermal insulation · ISO 15831", dir: "↑ 높을수록 따뜻하다", body: "보온 단위. 1 CLO는 21°C 실내에서 정장 한 벌이 주는 보온. 레이어를 더하면 대략 합산되므로 '오늘 몇 CLO가 필요한지'로 옷을 고를 수 있다.", scale: ["0.1 싱글렛", "0.4 미드", "0.8+ 겨울"] },
-  { k: "신장률 / 회복률", full: "stretch & recovery · ASTM D2594", dir: "↑ 신장은 움직임, 회복은 형태 유지", body: "얼마나 늘어나는지(가로/세로)와, 늘어난 뒤 얼마나 원래대로 돌아오는지. 회복률이 낮으면 50km 지점에서 옷이 처진다.", scale: ["<30% 우븐", "~50% 니트", "회복 95%+"] },
-  { k: "압박 mmHg", full: "graduated compression", dir: "↑ 높을수록 강하게 잡아준다", body: "타이츠가 허벅지를 누르는 압력. 15~20 mmHg 정도가 레이스용 근육 진동 억제 구간으로 자주 쓰인다.", scale: ["~10 소프트", "15–20 레이스", "20+ 리커버리"] },
-  { k: "데니어 (D)", full: "yarn linear density", dir: "↓ 낮을수록 얇고 가볍다", body: "실 9,000m의 무게(g). 7D 립스탑은 초경량 패커블, 20D는 내구성 위주. 바람막이 무게를 이해하는 핵심.", scale: ["7D 초경량", "15D 균형", "30D+ 내구"] },
+  { k: "GSM", name: "원단 중량", unit: "g/m²", std: "ASTM D3776 (KNIT) · ISO 3801 (WOVEN)",
+    dir: "낮을수록 가벼움",
+    body: "원단 1 m²의 중량(g). NESCL R 제품명의 숫자는 이 값입니다.",
+    ref: [["~120", "레이스 상의"], ["120~180", "사계절 상의"], ["180~300", "보온 레이어"]] },
+  { k: "CFM", name: "통기도", unit: "ft³/min/ft²", std: "ASTM D737 · 125 Pa",
+    dir: "높을수록 공기가 잘 통함",
+    body: "125 Pa 압력차에서 원단 1 ft²를 1분간 통과하는 공기량. 싱글렛은 높은 값, 바람막이는 낮은 값이 유리합니다. 타공 원단은 타공부와 비타공부를 따로 측정합니다.",
+    ref: [["5 미만", "방풍"], ["20~100", "중간"], ["150 이상", "메쉬"]] },
+  { k: "MVTR", name: "투습도", unit: "g/m²/24h", std: "JIS L 1099 B-1",
+    dir: "높을수록 수증기가 잘 빠짐",
+    body: "24시간 동안 원단 1 m²를 통과하는 수증기량(g). 시험 방법에 따라 값이 크게 달라지므로 같은 방법끼리만 비교합니다.",
+    ref: [["8,000 미만", "낮음"], ["8,000~15,000", "보통"], ["20,000 이상", "높음"]] },
+  { k: "RET", name: "증발저항", unit: "m²·Pa/W", std: "ISO 11092",
+    dir: "낮을수록 땀 증발이 쉬움",
+    body: "땀 증기가 원단을 통과할 때의 저항. 원단 단위 시험값이며 완제품 값이 아닙니다. 20을 넘으면 고강도 러닝에 적합하지 않습니다.",
+    ref: [["6 미만", "매우 좋음"], ["6~13", "좋음"], ["13~20", "보통"]] },
+  { k: "CLO", name: "보온", unit: "clo", std: "ISO 15831 · ISO 9920",
+    dir: "높을수록 보온",
+    body: "보온 단위. 1 CLO는 0.155 m²·K/W입니다. 서멀 마네킹은 착장 전체를 측정하므로 제품별 값은 기여분을 추정한 근사치(±0.03)입니다.",
+    ref: [["0.05", "싱글렛"], ["0.2~0.3", "미드레이어"], ["0.5 이상", "겨울 착장"]] },
+  { k: "신장률 · 회복률", name: "", unit: "%", std: "ISO 20932-1",
+    dir: "신장률은 가동 범위, 회복률은 형태 유지",
+    body: "정해진 하중에서 늘어나는 비율(가로/세로)과, 하중을 제거한 뒤 원래 길이로 돌아오는 비율. 회복률이 낮으면 장거리에서 형태가 처집니다.",
+    ref: [["10% 미만", "직물"], ["15~30%", "스트레치 직물"], ["40~90%", "니트"]] },
+  { k: "압박", name: "", unit: "mmHg", std: "PRESSURE SENSOR",
+    dir: "높을수록 강한 압박",
+    body: "착용 시 피부에 가해지는 압력. 공인 스포츠 등급은 없으며 의료용 압박 등급과는 다른 체계입니다.",
+    ref: [["5~10", "약함"], ["10~15", "스포츠"], ["18 이상", "의료용"]] },
+  { k: "데니어", name: "", unit: "D", std: "YARN SPEC",
+    dir: "낮을수록 가는 실",
+    body: "실 9,000 m의 중량(g). 원단 중량과는 다른 값입니다.",
+    ref: [["7~10D", "초경량"], ["15~20D", "중간"], ["30D 이상", "내구성 위주"]] },
 ];
 
 const PRODUCTS = [
   {
-    id: "r01", code: "R-01 · RACE", name: "AERO 95 레이스 싱글렛", img: "assets/img/r01-singlet.webp", price: "89,000",
-    one: "95 GSM · 레이저 타공 · 접착 마감", temp: [12, 32],
-    desc: "하프·풀코스 레이스 데이를 위한 싱글렛. 등판 전체를 레이저 타공해 열이 가장 많이 쌓이는 견갑골 사이를 열었고, 암홀과 밑단은 봉제 대신 접착으로 마감해 30km 이후의 쓸림을 없앴습니다.",
-    kpis: [["GSM", 95, "", 0.3], ["CFM", 310, "", 0.95], ["RET", 1.8, "m²Pa/W", 0.9], ["MVTR", "22,000", "g/m²/24h", 0.9], ["무게 (M)", 68, "g", 0.85], ["UPF", 30, "", 0.6]],
+    id: "r01", code: "R-01", cat: "RACE", name: "Singlet 95",
+    img: "assets/img/r01-singlet.webp", price: "89,000",
+    one: "레이저 타공 · 본딩 마감 · 레이스 핏",
+    temp: [12, 30],
+    tempNote: "단독 착용, 템포런 기준. 레이스 강도에서는 8°C부터.",
+    desc: "하프·풀코스 레이스용 싱글렛. 등판 견갑골 사이에 레이저 타공 존을 두었고, 암홀과 밑단은 봉제 대신 본딩으로 마감했습니다.",
+    kpis: [
+      ["GSM", "원단 중량", "95", "g/m²", "ASTM D3776"],
+      ["CFM", "통기도", "190", "", "ASTM D737 · 125 Pa"],
+      ["MVTR", "투습도", "24,000", "g/m²/24h", "JIS L 1099 B-1"],
+      ["RET", "증발저항", "2.4", "m²·Pa/W", "ISO 11092"],
+      ["CLO", "보온", "0.06", "", "ISO 15831"],
+      ["", "제품 무게 (M)", "68", "g", "S 64 · L 73 · XL 78"],
+    ],
     specs: [
-      ["원단", "Aero-Knit 95", "재생 폴리에스터 92% · 폴리우레탄 8%"],
-      ["중량", "95 g/m²", "KS K ISO 3801"],
-      ["통기도", "310 CFM", "ASTM D737 · 125 Pa"],
-      ["투습도", "22,000 g/m²/24h", "JIS L 1099 B-1"],
-      ["증발저항", "RET 1.8", "ISO 11092"],
-      ["신장률 (가로/세로)", "55% / 35%", "회복률 95% (세탁 50회 후 92%)"],
-      ["건조 시간", "18분", "사내 기준: 0.5 ml 적하 후 확산 건조"],
-      ["핏", "레이스 핏", "가슴 기준 정사이즈, 몸통 길이 +2cm (배번 고정 고려)"],
+      ["FABRIC", [
+        ["원단", "Aero-Knit 95", "", "", "싱글 저지 메쉬"],
+        ["혼용률", "재생 폴리에스터 92% · 폴리우레탄 8%", "", "", ""],
+        ["원단 중량", "95", "g/m²", "ASTM D3776", ""],
+        ["생산", "원단 대한민국 · 봉제 대한민국", "", "", ""],
+      ]],
+      ["PERFORMANCE", [
+        ["통기도", "190", "CFM", "ASTM D737 · 125 Pa", "타공 존 240 CFM"],
+        ["투습도", "24,000", "g/m²/24h", "JIS L 1099 B-1", "A-1 기준 약 11,000"],
+        ["증발저항", "2.4", "m²·Pa/W", "ISO 11092", ""],
+        ["보온", "0.06", "CLO", "ISO 15831", "기여값 근사, ±0.03"],
+        ["신장률 (가로/세로)", "55 / 35", "%", "ISO 20932-1", "회복률 95%, 세탁 50회 후 92%"],
+        ["건조 시간", "21", "분", "AATCC 201", ""],
+        ["자외선 차단", "UPF 15", "", "AS/NZS 4399", "블랙 기준"],
+      ]],
+      ["FIT", [
+        ["핏", "레이스 핏", "", "", "가슴 정사이즈, 몸통 길이 +2 cm"],
+        ["실측 (M)", "가슴 단면 46 · 총장 66", "cm", "", ""],
+        ["제품 무게", "S 64 · M 68 · L 73 · XL 78", "g", "", "건조 상태, 택 제외"],
+        ["솔기", "본딩", "", "", "0.3 mm 테이프, 봉제선 없음"],
+        ["배번 고정", "밑단 안쪽 루프 4개", "", "", "옷핀 불필요"],
+      ]],
+      ["CARE", [
+        ["세탁", "30°C 약세탁, 자연 건조", "", "", "섬유유연제, 건조기, 다림질 금지"],
+      ]],
     ],
-    tech: [
-      ["레이저 타공 존", "등판 견갑골 사이 타공 밀도 2배. 전면은 배번 핀 고정을 위해 타공 없음."],
-      ["본딩 암홀 · 밑단", "봉제선 0. 0.3mm 접착 테이프로 마감해 겨드랑이 마찰 제거."],
-      ["사이드 시그널 테이프", "왼쪽 옆선 형광 본딩 테이프 — 시인성 + 봉제선 대체."],
-      ["배번 루프", "밑단 안쪽 4개 루프로 핀 없이 배번 고정."],
+    construction: [
+      [58, 30, "레이저 타공 존", "등판 상부 Ø1.2 mm 타공 약 3,200개. 타공 존 개구율 약 5%."],
+      [25, 58, "사이드 시그널 테이프", "왼쪽 옆선 형광 본딩 테이프. 옆선 봉제 대체."],
+      [43, 17, "레이서백 · 본딩 암홀", "팔 스윙 범위를 확보한 레이서백 컷. 암홀 0.3 mm 본딩 테이프."],
+      [50, 86, "본딩 밑단", "3 mm 실리콘 도트. 말림 방지."],
     ],
-    use: [["레이스 데이", "15°C 이상 하프·풀"], ["인터벌", "트랙 · 고강도"], ["NO", "5°C 이하 단독 착용", true]],
-    hotspots: [
-      [58, 30, "레이저 타공 존", "등판 상부에 직경 0.8mm 타공 2,400개. 열이 몰리는 견갑골 사이를 집중 배기."],
-      [25, 58, "시그널 테이프", "옆선 봉제 대신 형광 본딩 테이프. 야간 시인성과 무봉제 착용감을 동시에."],
-      [43, 17, "레이서백 · 본딩 암홀", "팔 스윙 범위를 막지 않는 레이서백 컷, 봉제선 없는 접착 마감."],
-      [50, 86, "본딩 밑단", "말려 올라가지 않도록 3mm 실리콘 도트 + 접착 마감."],
-    ],
+    use: {
+      yes: [["레이스", "12°C 이상 하프·풀코스"], ["인터벌", "트랙, 고강도"]],
+      no: [["5°C 이하", "단독 착용"]],
+    },
   },
   {
-    id: "r02", code: "R-02 · THERMAL", name: "THERMO GRID 185 후드슬리브", img: "assets/img/r02-hoodsleeve.webp", price: "119,000",
-    one: "185 GSM 그리드 플리스 · CLO 0.42", temp: [-6, 10],
-    desc: "네스클의 시그니처 후드슬리브를 레이스 스펙으로. 안쪽 그리드 플리스가 공기층을 만들어 보온하고, 그리드 사이 채널로 땀 증기를 뺍니다. 어깨 타이다잉 패널은 스타일 라인 DNA를 그대로 가져왔습니다.",
-    kpis: [["GSM", 185, "", 0.6], ["CLO", 0.42, "", 0.55], ["CFM", 120, "", 0.55], ["RET", 4.5, "m²Pa/W", 0.75], ["무게 (M)", 238, "g", 0.5], ["신장 (가로)", "60", "%", 0.8]],
+    id: "r02", code: "R-02", cat: "THERMAL", name: "Hood Sleeve 185",
+    img: "assets/img/r02-hoodsleeve.webp", price: "119,000",
+    one: "그리드 플리스 · 핑거홀 · 워치 윈도우",
+    temp: [-3, 10],
+    tempNote: "단독 착용, 템포런 기준. Wind Shell 28 병용 시 −8°C까지.",
+    desc: "네스클 후드슬리브의 레이스 사양. 내면 그리드 플리스가 공기층과 투습 채널을 형성합니다. 어깨 패널은 스타일 라인의 타이다잉 공정을 적용했습니다.",
+    kpis: [
+      ["GSM", "원단 중량", "185", "g/m²", "ASTM D3776"],
+      ["CFM", "통기도", "65", "", "ASTM D737 · 125 Pa"],
+      ["MVTR", "투습도", "12,000", "g/m²/24h", "JIS L 1099 B-1"],
+      ["RET", "증발저항", "5.5", "m²·Pa/W", "ISO 11092"],
+      ["CLO", "보온", "0.30", "", "ISO 15831"],
+      ["", "제품 무게 (M)", "310", "g", "S 295 · L 330 · XL 350"],
+    ],
     specs: [
-      ["원단", "Grid Fleece 185", "폴리에스터 88% · 폴리우레탄 12%"],
-      ["중량", "185 g/m²", "KS K ISO 3801"],
-      ["보온", "0.42 CLO", "ISO 15831 서멀 마네킹 (단독 착용)"],
-      ["통기도", "120 CFM", "ASTM D737"],
-      ["증발저항", "RET 4.5", "ISO 11092"],
-      ["신장률 (가로/세로)", "60% / 45%", "회복률 93%"],
-      ["소매 길이", "손등까지 +4cm", "핑거홀 사용 시 손등 커버"],
-      ["핏", "슬림 핏", "러닝 베스트 아래 레이어링 기준 설계"],
+      ["FABRIC", [
+        ["원단", "Grid Fleece 185", "", "", "내면 그리드 기모"],
+        ["혼용률", "폴리에스터 90% · 폴리우레탄 10%", "", "", ""],
+        ["원단 중량", "185", "g/m²", "ASTM D3776", ""],
+        ["생산", "원단 대한민국 · 봉제 대한민국", "", "", ""],
+      ]],
+      ["PERFORMANCE", [
+        ["통기도", "65", "CFM", "ASTM D737 · 125 Pa", ""],
+        ["투습도", "12,000", "g/m²/24h", "JIS L 1099 B-1", "A-1 기준 약 6,500"],
+        ["증발저항", "5.5", "m²·Pa/W", "ISO 11092", ""],
+        ["보온", "0.30", "CLO", "ISO 15831", "기여값 근사, ±0.03"],
+        ["신장률 (가로/세로)", "60 / 45", "%", "ISO 20932-1", "회복률 93%"],
+        ["건조 시간", "38", "분", "AATCC 201", ""],
+        ["자외선 차단", "UPF 50+", "", "AS/NZS 4399", ""],
+      ]],
+      ["FIT", [
+        ["핏", "슬림 핏", "", "", "러닝 베스트 아래 착용 기준"],
+        ["실측 (M)", "총장 70 · 소매 67", "cm", "", "소매는 손등 덮개 4 cm 포함"],
+        ["제품 무게", "S 295 · M 310 · L 330 · XL 350", "g", "", "건조 상태, 택 제외"],
+        ["솔기", "플랫락", "", "", "베스트 어깨끈 접촉 부위 봉제선 이동"],
+      ]],
+      ["CARE", [
+        ["세탁", "30°C, 뒤집어서 세탁", "", "", "표백제 금지, 자연 건조"],
+      ]],
     ],
-    tech: [
-      ["그리드 플리스 내면", "격자형 기모가 공기층(보온)과 배출 채널(통기)을 동시에."],
-      ["핑거홀 + 워치 윈도우", "왼손목 개구부로 소매를 걷지 않고 페이스 확인."],
-      ["플랫락 봉제", "모든 봉제선 평봉 처리, 베스트 어깨끈 닿는 부위는 봉제선 이동."],
-      ["타이다잉 어깨 패널", "스타일 라인 DNA. R 라인에서도 '네스클다움'은 유지."],
+    construction: [
+      [50, 9, "그리드 후드", "본체와 같은 그리드 플리스 내면."],
+      [50, 30, "타이다잉 어깨 패널", "스타일 라인의 타이다잉 공정을 기능 원단에 적용."],
+      [86, 89, "핑거홀 커프", "엄지 고정, 손등 보온. 왼쪽 손목에 워치 윈도우."],
+      [67, 83, "리플렉티브 탭", "밑단 반사 탭. 반사 성능 등급은 표기하지 않음."],
     ],
-    use: [["겨울 롱런", "-5 ~ 5°C · 베스트 착용"], ["가을 템프", "5 ~ 10°C 단독"], ["NO", "15°C 이상 고강도", true]],
-    hotspots: [
-      [50, 9, "그리드 후드", "안쪽 그리드 플리스가 이어진 후드. 헤어밴드 위로 덮어도 땀이 갇히지 않음."],
-      [50, 30, "타이다잉 어깨 패널", "스타일 라인의 타이다잉 공정을 기능 원단에 적용 — 두 라인이 만나는 지점."],
-      [86, 89, "핑거홀 커프", "엄지 고정으로 소매가 말려 올라가지 않고, 손등까지 보온."],
-      [67, 83, "리플렉티브 탭", "밑단 형광 반사 탭. 야간 한강 러닝 시인성."],
-    ],
+    use: {
+      yes: [["단독 착용", "−3~10°C 템포런"], ["Wind Shell 28 병용", "−8°C까지"]],
+      no: [["15°C 이상", "고강도 러닝"]],
+    },
   },
   {
-    id: "r03", code: "R-03 · SHELL", name: "ZERO 7D 윈드쉘", img: "assets/img/r03-shell.webp", price: "159,000",
-    one: "7D 립스탑 · 72 g · 주먹 크기로 패킹", temp: [-10, 14],
-    desc: "레이스 출발 전 대기, 새벽 강바람, 고개 하산을 위한 초경량 쉘. 7데니어 립스탑으로 72g, 가슴 포켓 안으로 접어 넣으면 젤 2개 크기가 됩니다. 등판 레이저 슬릿으로 오르막의 열을 뺍니다.",
-    kpis: [["무게 (M)", 72, "g", 0.95], ["데니어", "7", "D", 0.95], ["CFM", 1.5, "", 0.1], ["내수압", "1,500", "mm", 0.4], ["MVTR", "18,000", "g/m²/24h", 0.75], ["패킹", "8×6", "cm", 0.9]],
+    id: "r03", code: "R-03", cat: "SHELL", name: "Wind Shell 28",
+    img: "assets/img/r03-shell.webp", price: "159,000",
+    one: "7D 립스탑 · 발수(DWR) · 셀프 패킹",
+    temp: [0, 15],
+    tempNote: "겉옷 기준. Hood Sleeve 185 위에 착용 시 −8°C까지.",
+    desc: "출발 대기, 새벽 강바람, 하산 구간용 초경량 쉘. 7D 나일론 립스탑, 후드 없음, 무게 82 g(M). 가슴 포켓에 10 × 8 × 5 cm로 수납됩니다. 발수(DWR) 제품이며 방수 제품이 아닙니다.",
+    kpis: [
+      ["GSM", "원단 중량", "28", "g/m²", "ISO 3801"],
+      ["CFM", "통기도", "1.5", "", "ASTM D737 · 125 Pa"],
+      ["MVTR", "투습도", "14,000", "g/m²/24h", "JIS L 1099 B-1"],
+      ["RET", "증발저항", "6.0", "m²·Pa/W", "ISO 11092"],
+      ["CLO", "보온", "0.10", "", "ISO 15831"],
+      ["", "제품 무게 (M)", "82", "g", "S 78 · L 87 · XL 93"],
+    ],
     specs: [
-      ["원단", "7D Nylon Ripstop", "나일론 100% · C0 발수 (PFAS-free)"],
-      ["중량", "32 g/m²", "KS K ISO 3801"],
-      ["통기도", "1.5 CFM", "ASTM D737 — 사실상 방풍"],
-      ["투습도", "18,000 g/m²/24h", "JIS L 1099 B-1"],
-      ["내수압", "1,500 mm", "ISO 811 · 발수 지속 세탁 20회"],
-      ["패킹 크기", "8 × 6 × 4 cm", "가슴 포켓 셀프 패킹"],
-      ["소매", "엘라스틱 바인딩", "시계 위로 당겨 올려도 고정"],
-      ["핏", "레귤러", "후드슬리브 위 레이어링 기준"],
+      ["FABRIC", [
+        ["원단", "7D Nylon Ripstop", "", "", "멤브레인, 코팅 없음"],
+        ["혼용률", "나일론 100%", "", "", ""],
+        ["원사", "7", "D", "", "립 원사 15D"],
+        ["원단 중량", "28", "g/m²", "ISO 3801", ""],
+        ["발수 가공", "C0 DWR", "", "", "PFAS 미사용"],
+        ["생산", "원단 일본 · 봉제 대한민국", "", "", ""],
+      ]],
+      ["PERFORMANCE", [
+        ["통기도", "1.5", "CFM", "ASTM D737 · 125 Pa", "방풍"],
+        ["투습도", "14,000", "g/m²/24h", "JIS L 1099 B-1", "A-1 기준 약 7,000"],
+        ["증발저항", "6.0", "m²·Pa/W", "ISO 11092", ""],
+        ["보온", "0.10", "CLO", "ISO 15831", "기여값 근사, ±0.03"],
+        ["발수도", "초기 5급 · 세탁 5회 후 3~4급", "", "ISO 4920", "세탁 ISO 6330"],
+        ["방수", "해당 없음", "", "", "내수압 표기 없음, 심실링 없음"],
+        ["건조 시간", "12", "분", "AATCC 201", ""],
+      ]],
+      ["FIT", [
+        ["핏", "레귤러 핏", "", "", "Hood Sleeve 185 위 착용 기준"],
+        ["실측 (M)", "총장 68 · 소매 66", "cm", "", ""],
+        ["제품 무게", "S 78 · M 82 · L 87 · XL 93", "g", "", "후드 없음"],
+        ["패킹 크기", "10 × 8 × 5", "cm", "", "가슴 포켓 셀프 패킹"],
+        ["솔기", "접착 테이프 (어깨)", "", "", "비방수"],
+        ["소매", "엘라스틱 바인딩", "", "", ""],
+      ]],
+      ["CARE", [
+        ["세탁", "30°C, 섬유유연제 금지", "", "", "발수 저하 시 저온 건조기 10분"],
+      ]],
     ],
-    tech: [
-      ["레이저 벤트 슬릿", "등판 요크 12개 슬릿. 방풍은 유지하면서 등판 열 배출."],
-      ["셀프 패킹 포켓", "가슴 포켓을 뒤집어 본체 수납, 지퍼풀에 고리."],
-      ["하프 집업", "무게 절감 + 오르막에서 빠른 환기."],
-      ["초음파 접착 솔기", "어깨 솔기는 초음파 접착으로 바늘구멍 누수 제거."],
+    construction: [
+      [50, 28, "레이저 벤트 슬릿", "요크 라인의 레이저 컷 세로 슬릿. 방풍 원단의 배기 통로."],
+      [50, 20, "하프 지퍼", "하프 집업으로 무게 절감. 형광 지퍼 풀."],
+      [64, 36, "셀프 패킹 포켓", "가슴 포켓에 본체 수납. 패킹 크기 10 × 8 × 5 cm."],
+      [12, 86, "엘라스틱 커프", "엘라스틱 바인딩. 시계 위 고정."],
     ],
-    use: [["레이스 출발 대기", "버리지 않아도 되는 무게"], ["바람 부는 날", "풍속 5m/s 이상"], ["NO", "폭우 장시간 (방수 아님)", true]],
-    hotspots: [
-      [50, 28, "레이저 벤트 슬릿", "등판 요크 12개 슬릿 — 바람은 막고 열은 뺀다."],
-      [50, 20, "하프 지퍼 · 형광 풀", "장갑 낀 손으로 잡히는 형광 지퍼 풀."],
-      [64, 36, "셀프 패킹 포켓", "포켓을 뒤집으면 재킷 전체가 8×6cm로 수납."],
-      [12, 86, "엘라스틱 커프", "시계 위로 걷어도 내려오지 않는 바인딩."],
-    ],
+    use: {
+      yes: [["출발 대기", "출발 후 접어서 휴대"], ["강풍", "풍속 6 m/s 이상, 0~15°C"]],
+      no: [["강우", "방수 제품 아님"]],
+    },
   },
   {
-    id: "r04", code: "R-04 · CARRY", name: "CARRY 8 레이스 하프타이츠", img: "assets/img/r04-tights.webp", price: "109,000",
-    one: "젤 8개 수납 · 16 mmHg · 인심 22cm", temp: [0, 30],
-    desc: "베스트 없이 풀코스를 뛰는 러너를 위한 타이츠. 허리 360° 포켓에 젤 6개, 허벅지 포켓에 스마트폰과 젤 2개. 무엇을 얼마나 넣을 수 있는지 숫자로 알려드립니다.",
-    kpis: [["젤 수납", 8, "개", 0.9], ["총 용량", 1.1, "L", 0.7], ["압박", 16, "mmHg", 0.6], ["GSM", 210, "", 0.6], ["인심", 22, "cm", 0.5], ["무게 (M)", 164, "g", 0.6]],
+    id: "r04", code: "R-04", cat: "CARRY", name: "Half Tights 210",
+    img: "assets/img/r04-tights.webp", price: "109,000",
+    one: "젤 8개 수납 · 12 mmHg · 인심 22 cm",
+    temp: [5, 30],
+    tempNote: "템포런 기준. 무릎 아래가 노출되는 하프 길이.",
+    desc: "베스트 없이 풀코스를 달리는 러너용 하프타이츠. 허리 포켓에 젤 6개, 좌우 허벅지 포켓에 젤 1개씩 수납합니다. 한쪽 허벅지 포켓에는 6.7인치 스마트폰이 들어갑니다.",
+    kpis: [
+      ["GSM", "원단 중량", "210", "g/m²", "ASTM D3776"],
+      ["CFM", "통기도", "30", "", "ASTM D737 · 125 Pa"],
+      ["MVTR", "투습도", "14,000", "g/m²/24h", "JIS L 1099 B-1"],
+      ["RET", "증발저항", "4.6", "m²·Pa/W", "ISO 11092"],
+      ["CLO", "보온", "0.08", "", "ISO 15831"],
+      ["", "제품 무게 (M)", "185", "g", "S 172 · L 198 · XL 212"],
+    ],
     specs: [
-      ["원단", "Compress-Knit 210", "나일론 72% · 폴리우레탄 28%"],
-      ["중량", "210 g/m²", "KS K ISO 3801"],
-      ["압박", "허벅지 16 mmHg", "단계 압박, 무릎 위 12 mmHg"],
-      ["수납", "허리 6 + 허벅지 2", "젤 8개 또는 6.7\" 폰 + 젤 6개"],
-      ["포켓 바운스", "±4 mm", "사내 기준: 젤 6개 · 페이스 4'00\"/km 측정"],
-      ["인심 (M)", "22 cm", "하프 길이, 허벅지 쓸림 방지"],
-      ["허리", "무봉제 와이드 밴드 + 드로코드", "폭 9cm"],
-      ["신장률 (가로/세로)", "70% / 60%", "회복률 96%"],
+      ["FABRIC", [
+        ["원단", "Compress-Knit 210", "", "", "컴프레션 니트"],
+        ["혼용률", "나일론 76% · 폴리우레탄 24%", "", "", ""],
+        ["원단 중량", "210", "g/m²", "ASTM D3776", ""],
+        ["생산", "원단 대한민국 · 봉제 대한민국", "", "", ""],
+      ]],
+      ["PERFORMANCE", [
+        ["통기도", "30", "CFM", "ASTM D737 · 125 Pa", ""],
+        ["투습도", "14,000", "g/m²/24h", "JIS L 1099 B-1", "A-1 기준 약 8,000"],
+        ["증발저항", "4.6", "m²·Pa/W", "ISO 11092", ""],
+        ["보온", "0.08", "CLO", "ISO 15831", "기여값 근사, ±0.03"],
+        ["신장률 (가로/세로)", "85 / 60", "%", "ISO 20932-1", "회복률 95%"],
+        ["압박", "대퇴 12 · 무릎 위 8", "mmHg", "", "센서 측정, M 사이즈. 의료용 등급 아님"],
+        ["건조 시간", "28", "분", "AATCC 201", ""],
+        ["자외선 차단", "UPF 50+", "", "AS/NZS 4399", ""],
+      ]],
+      ["STORAGE", [
+        ["젤 수납", "최대 8개", "", "", "허리 6 · 허벅지 좌우 각 1"],
+        ["스마트폰", "6.7인치 1대", "", "", "허벅지 포켓, 수납 시 젤 7개"],
+        ["총 용량", "약 0.6", "L", "", ""],
+        ["포켓 바운스", "±4", "mm", "", "자체 시험, n=5 · 젤 6개 · 4'00\"/km"],
+      ]],
+      ["FIT", [
+        ["핏", "컴프레션 핏", "", "", ""],
+        ["인심 (M)", "22", "cm", "", "하프 길이"],
+        ["허리 밴드", "폭 9 cm 무봉제 와이드 밴드", "", "", "드로코드"],
+        ["제품 무게", "S 172 · M 185 · L 198 · XL 212", "g", "", "건조 상태, 택 제외"],
+        ["솔기", "플랫락", "", "", ""],
+      ]],
+      ["CARE", [
+        ["세탁", "30°C, 뒤집어서 세탁", "", "", "섬유유연제 금지, 뉘어서 건조"],
+      ]],
     ],
-    tech: [
-      ["360° 메쉬 포켓 밴드", "허리 둘레 6칸, 칸마다 젤 1개 기준 폭 설계."],
-      ["사이드 허벅지 포켓", "6.7인치 폰 수납, 상단 이중 원단으로 튀어나옴 방지."],
-      ["실리콘 그리퍼 밑단", "말려 올라감 방지, 피부 자극 낮은 도트 패턴."],
-      ["형광 드로코드 팁", "출발선에서 빠르게 찾는 조임 끈."],
+    construction: [
+      [22, 21, "360° 젤 포켓", "허리 둘레 메쉬 포켓 밴드. 젤 6개 수납."],
+      [44, 30, "형광 드로코드", "조임 끈 끝단 형광 처리."],
+      [88, 55, "허벅지 포켓", "좌우 각 1개. 6.7인치 스마트폰 수납, 상단 이중 원단."],
+      [25, 86, "실리콘 그리퍼", "도트 패턴 실리콘 밑단. 말림 방지."],
     ],
-    use: [["풀코스", "베스트 없이 젤 8개"], ["롱런 훈련", "물병 없는 코스"], ["NO", "트레일 (수납 부족)", true]],
-    hotspots: [
-      [22, 21, "360° 젤 포켓", "허리 메쉬 6칸 — 칸마다 젤 1개, 달리면서 꺼낼 수 있는 각도."],
-      [44, 30, "형광 드로코드", "출발 직전 조임 조절. 끝단 형광 처리."],
-      [88, 55, "허벅지 포켓", "6.7\" 스마트폰 수납, 상단 이중 원단으로 바운스 억제."],
-      [25, 86, "실리콘 그리퍼", "도트 실리콘 밑단으로 42km 내내 고정."],
-    ],
+    use: {
+      yes: [["풀코스", "베스트 없이 젤 8개 휴대"], ["롱런", "급수 지원 코스"]],
+      no: [["트레일", "수납 용량 부족"]],
+    },
   },
 ];
+
+const COMPARE_ROWS = [
+  ["원단 중량", "g/m²", ["95", "185", "28", "210"]],
+  ["제품 무게 (M)", "g", ["68", "310", "82", "185"]],
+  ["통기도", "CFM", ["190", "65", "1.5", "30"]],
+  ["투습도", "g/m²/24h", ["24,000", "12,000", "14,000", "14,000"]],
+  ["증발저항", "RET · m²·Pa/W", ["2.4", "5.5", "6.0", "4.6"]],
+  ["보온", "CLO", ["0.06", "0.30", "0.10", "0.08"]],
+  ["권장 기온", "°C", ["12~30", "−3~10", "0~15", "5~30"]],
+  ["솔기", "", ["본딩", "플랫락", "접착 테이프", "플랫락"]],
+  ["수납", "", ["배번 루프 4개", "없음", "셀프 패킹", "젤 8개"]],
+];
+
+const ITEMS = {
+  singlet:    { name: "Singlet 95",            line: "NESCL R", clo: 0.06 },
+  tee:        { name: "기능성 반팔",            line: "NESCL",   clo: 0.09 },
+  base:       { name: "롱슬리브 베이스레이어",  line: "NESCL",   clo: 0.20 },
+  hood:       { name: "Hood Sleeve 185",       line: "NESCL R", clo: 0.30 },
+  shell:      { name: "Wind Shell 28",         line: "NESCL R", clo: 0.10 },
+  tights:     { name: "Half Tights 210",       line: "NESCL R", clo: 0.08 },
+  longtights: { name: "롱타이츠",              line: "NESCL",   clo: 0.20 },
+  gloves:     { name: "장갑 · 넥워머",          line: "NESCL",   clo: null },
+};
+
+const BONUS = { easy: 0, tempo: 5, race: 9 };
+
+function feelsLike(t, w, rain) {
+  let f = t;
+  if (t <= 10 && w >= 1.3) {
+    const p = Math.pow(w * 3.6, 0.16);
+    f = 13.12 + 0.6215 * t - 11.37 * p + 0.3965 * t * p;
+  }
+  if (rain) f -= 3;
+  return Math.round(f);
+}
+
+function recommend(t, w, intensity, rain) {
+  const feels = feelsLike(t, w, rain);
+  const eff = feels + BONUS[intensity];
+
+  let tops;
+  if (eff >= 17) tops = ["singlet"];
+  else if (eff >= 12) tops = ["tee"];
+  else if (eff >= 7) tops = ["base"];
+  else if (eff >= 2) tops = ["hood"];
+  else if (eff >= -3) tops = ["hood", "shell"];
+  else tops = ["base", "hood", "shell"];
+  if ((w >= 6 || rain) && t <= 15 && eff < 15 && !tops.includes("shell")) tops.push("shell");
+
+  const bottom = eff >= 10 ? "tights" : "longtights";
+
+  const rows = [
+    ...tops.map((k, i) => ({ layer: `상의 ${i + 1}`, item: ITEMS[k] })),
+    { layer: "하의", item: ITEMS[bottom] },
+    ...(feels < 3 ? [{ layer: "액세서리", item: ITEMS.gloves }] : []),
+  ];
+  const total = rows.reduce((sum, r) => sum + (r.item.clo ?? 0), 0);
+
+  const tips = [];
+  if (intensity === "race" && t <= 10 && !tops.includes("shell")) tips.push("출발 대기 중에는 Wind Shell 28을 착용하고, 출발 후 접어서 휴대합니다(패킹 10 × 8 × 5 cm).");
+  if (rain && tops.includes("shell")) tips.push("Wind Shell 28은 발수(DWR) 제품이며 방수 제품이 아닙니다. 1시간 이상 강우 시 권장하지 않습니다.");
+  if (t >= 24) tips.push("고온 구간. 밝은 색, 고통기 상의와 급수 계획을 권장합니다.");
+  if (feels <= -15) tips.push("체감 기온 −15°C 이하. 실외 고강도 러닝은 권장하지 않습니다.");
+  if (!tips.length) tips.push("출발 후 1 km 동안 약간 서늘한 상태가 적정 착용 기준입니다.");
+
+  return { feels, eff, rows, total, tips };
+}
 
 const T_MIN = -15, T_MAX = 35;
 const pct = (t) => ((t - T_MIN) / (T_MAX - T_MIN)) * 100;
-const tempBar = ([lo, hi]) => `
-  <div class="temp-bar"><i style="left:${pct(lo)}%;width:${pct(hi) - pct(lo)}%"></i></div>
-  <div class="temp-scale"><span>${T_MIN}°</span><span>권장 ${lo}° ~ ${hi}°C</span><span>${T_MAX}°</span></div>`;
+const num = (n) => String(n).replace("-", "−");
+const rangeText = ([lo, hi]) => `${num(lo)}~${num(hi)}`;
+const nameHTML = (name) => { const i = name.lastIndexOf(" "); return `${name.slice(0, i)} <b>${name.slice(i + 1)}</b>`; };
+const ruler = ([lo, hi]) => `
+  <div class="ruler"><i style="left:${pct(lo)}%;width:${pct(hi) - pct(lo)}%"></i></div>
+  <div class="ruler-ticks" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="ruler-scale" aria-hidden="true"><span>−10</span><span>0</span><span>10</span><span>20</span><span>30</span></div>`;
 
-document.getElementById("glossaryGrid").innerHTML = GLOSSARY.map((g) => `
-  <article class="gl">
-    <header><h3>${g.k}</h3><span class="full">${g.full}</span></header>
-    <span class="dir">${g.dir}</span>
-    <p>${g.body}</p>
-    <div class="scale">${g.scale.map((s) => `<span>${s}</span>`).join("")}</div>
-  </article>`).join("");
+const card = (p) => `
+  <a class="card" href="#${p.id}">
+    <div class="shot"><img src="${p.img}" alt="${p.name}" width="1122" height="1402" loading="lazy"></div>
+    <p class="card-meta"><span>${p.code}</span><span>${p.cat}</span></p>
+    <h3 class="card-name">${nameHTML(p.name)}</h3>
+    <p class="card-one">${p.one}</p>
+    <dl class="rows">
+      <div><dt>원단 중량</dt><dd>${p.kpis[0][2]}<span class="u">g/m²</span></dd></div>
+      <div><dt>제품 무게 (M)</dt><dd>${p.kpis[5][2]}<span class="u">g</span></dd></div>
+      <div><dt>통기도</dt><dd>${p.kpis[1][2]}<span class="u">CFM</span></dd></div>
+      <div><dt>권장 기온</dt><dd>${rangeText(p.temp)}<span class="u">°C</span></dd></div>
+    </dl>
+    ${ruler(p.temp)}
+  </a>`;
 
-document.getElementById("cards").innerHTML = PRODUCTS.map((p) => `
-  <button class="card" data-id="${p.id}" type="button">
-    <img src="${p.img}" alt="${p.name}" loading="lazy" />
-    <div class="meta">
-      <span class="code">${p.code}</span>
-      <h3>${p.name}</h3>
-      <p class="one">${p.one}</p>
-      ${tempBar(p.temp)}
-      <div class="chips">${p.kpis.slice(0, 3).map(([k, v, u]) => `<span>${k} ${v}${u ? " " + u : ""}</span>`).join("")}</div>
-    </div>
-  </button>`).join("");
+const glossaryRow = (g) => `
+  <tr>
+    <th scope="row"><b>${g.k}</b><span>${[g.name, g.unit].filter(Boolean).join(" · ")}</span></th>
+    <td class="def"><p>${g.body}</p><span class="micro mute">${g.std}</span></td>
+    <td class="dir">${g.dir}</td>
+    <td class="gl-ref"><ul>${g.ref.map(([v, l]) => `<li><b>${v}</b><span>${l}</span></li>`).join("")}</ul></td>
+  </tr>`;
 
-const COMPARE_ROWS = [
-  ["원단 중량 (GSM)", ["95", "185", "32", "210"], "min"],
-  ["제품 무게 (M)", ["68 g", "238 g", "72 g", "164 g"], "min"],
-  ["통기도 (CFM)", ["310", "120", "1.5", "60"], null],
-  ["증발저항 (RET)", ["1.8", "4.5", "5.2", "3.9"], "min"],
-  ["보온 (CLO)", ["0.08", "0.42", "0.20", "0.15"], null],
-  ["권장 기온", ["12 ~ 32°C", "-6 ~ 10°C", "-10 ~ 14°C", "0 ~ 30°C"], null],
-  ["봉제 방식", ["접착", "플랫락", "초음파 접착", "플랫락"], null],
-  ["수납", ["배번 루프", "-", "셀프 패킹", "젤 8개 · 1.1 L"], null],
-];
-document.getElementById("compareTable").innerHTML = `
-  <thead><tr><th></th>${PRODUCTS.map((p) => `<th>${p.code.split(" · ")[0]} ${p.name.split(" ")[0]} ${p.name.split(" ")[1]}</th>`).join("")}</tr></thead>
-  <tbody>${COMPARE_ROWS.map(([label, vals, best]) => {
-    const nums = vals.map((v) => parseFloat(v));
-    const bestIdx = best === "min" ? nums.indexOf(Math.min(...nums)) : -1;
-    return `<tr><th>${label}</th>${vals.map((v, i) => `<td class="${i === bestIdx ? "best" : ""}">${v}</td>`).join("")}</tr>`;
-  }).join("")}</tbody>`;
+const unit = (u) => (u ? `<span class="u">${u}</span>` : "");
+const specRow = ([k, v, u, m, n]) => `
+  <tr><th scope="row">${k}</th>${m || n
+    ? `<td class="v">${v}${unit(u)}</td><td class="m">${m ? `<span>${m}</span>` : ""}${n ? `<em>${n}</em>` : ""}</td>`
+    : `<td class="v" colspan="2">${v}${unit(u)}</td>`}</tr>`;
+
+const pdpBody = (p) => `
+  <div class="pdp-media"><div class="pdp-figure shot">
+    <img src="${p.img}" alt="${p.name}" width="1122" height="1402">
+    ${p.construction.map(([x, y, t], i) => `<button class="callout" type="button" style="left:${x}%;top:${y}%" data-i="${i}" aria-label="상세 ${i + 1}: ${t}">${i + 1}</button>`).join("")}
+  </div></div>
+  <div class="pdp-info">
+    <p class="micro mute">${p.code} · ${p.cat}</p>
+    <h2 class="pdp-name" id="pdpName">${nameHTML(p.name)}</h2>
+    <p class="pdp-one">${p.one}</p>
+    <p class="pdp-price">₩${p.price}<small>예시 가격</small></p>
+    <p>${p.desc}</p>
+
+    <h3 class="pdp-h">KEY NUMBERS</h3>
+    <dl class="plate is-3"><div class="plate-grid">${p.kpis.map(([code, label, v, u, m]) => `
+      <div><dt>${code ? `<span class="micro">${code}</span>` : ""}${label}</dt><dd class="val">${v}${unit(u)}</dd><dd class="method">${m}</dd></div>`).join("")}
+    </div></dl>
+
+    <h3 class="pdp-h">TEMPERATURE RANGE</h3>
+    <dl class="rows"><div><dt>권장 기온</dt><dd>${rangeText(p.temp)}<span class="u">°C</span></dd></div></dl>
+    ${ruler(p.temp)}
+    <p class="fine">${p.tempNote}</p>
+
+    <h3 class="pdp-h">SPECIFICATION</h3>
+    <table class="tbl spec"><tbody>${p.specs.map(([group, rows]) => `
+      <tr class="grp"><th colspan="3" scope="colgroup">${group}</th></tr>${rows.map(specRow).join("")}`).join("")}
+    </tbody></table>
+
+    <h3 class="pdp-h">CONSTRUCTION</h3>
+    <ol class="cons">${p.construction.map(([, , t, b], i) => `
+      <li data-i="${i}"><span class="callout">${i + 1}</span><div><h4>${t}</h4><p>${b}</p></div></li>`).join("")}
+    </ol>
+
+    <h3 class="pdp-h">WHEN TO WEAR</h3>
+    <table class="tbl spec"><tbody>
+      ${p.use.yes.map(([t, d]) => `<tr><th scope="row">권장</th><td class="v">${t}</td><td class="m"><em>${d}</em></td></tr>`).join("")}
+      ${p.use.no.map(([t, d]) => `<tr><th scope="row">권장하지 않음</th><td class="v">${t}</td><td class="m"><em>${d}</em></td></tr>`).join("")}
+    </tbody></table>
+
+    <p class="fine">수치는 예시이며 실제 시험성적서가 아닙니다.</p>
+  </div>`;
+
+const compareTable = () => `
+  <colgroup><col class="lab"><col><col><col><col></colgroup>
+  <thead><tr><th></th>${PRODUCTS.map((p) => { const i = p.name.lastIndexOf(" "); return `
+    <th scope="col"><span class="code">${p.code}</span><span class="num">${p.name.slice(i + 1)}</span><span class="noun">${p.name.slice(0, i).toUpperCase()}</span></th>`; }).join("")}</tr></thead>
+  <tbody>${COMPARE_ROWS.map(([label, u, vals]) => `
+    <tr><th scope="row">${label}${u ? `<span>${u}</span>` : ""}</th>${vals.map((v) => `<td${u ? "" : ' class="txt"'}>${v}</td>`).join("")}</tr>`).join("")}
+  </tbody>`;
+
+const layerResult = (r) => `
+  <p class="tool-h">추천 조합</p>
+  <dl class="plate is-3 is-fixed"><div class="plate-grid">
+    <div><dt>체감 기온</dt><dd class="val">${num(r.feels)}<span class="u">°C</span></dd></div>
+    <div><dt>운동 시 체감</dt><dd class="val">${num(r.eff)}<span class="u">°C</span></dd></div>
+    <div><dt>합산 CLO</dt><dd class="val">약 ${r.total.toFixed(2)}</dd></div>
+  </div></dl>
+  <table class="tbl">
+    <thead><tr><th>레이어</th><th>제품</th><th>라인</th><th class="r">CLO</th></tr></thead>
+    <tbody>${r.rows.map(({ layer, item }) => `
+      <tr><th scope="row">${layer}</th><td>${item.name}</td><td class="soft">${item.line}</td>${item.clo === null
+        ? `<td class="soft r">제외</td>`
+        : `<td class="fig r">${item.clo.toFixed(2)}</td>`}</tr>`).join("")}
+    </tbody>
+    <tfoot><tr><th colspan="3" scope="row">합계</th><td class="fig r">약 ${r.total.toFixed(2)}</td></tr></tfoot>
+  </table>
+  <p class="tip">${r.tips.join("<br>")}</p>`;
+
+document.getElementById("glossaryRows").innerHTML = GLOSSARY.map(glossaryRow).join("");
+document.getElementById("cards").innerHTML = PRODUCTS.map(card).join("");
+document.getElementById("compareTable").innerHTML = compareTable();
+
+const navLinks = [...document.querySelectorAll(".nav a")];
+const spy = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    for (const a of navLinks) a.setAttribute("aria-current", String(a.hash === `#${entry.target.id}`));
+  }
+}, { rootMargin: "-45% 0px -50% 0px" });
+document.querySelectorAll("#hero, .sec").forEach((el) => spy.observe(el));
+
+const toc = document.getElementById("toc");
+document.getElementById("tocOpen").addEventListener("click", () => toc.showModal());
+toc.addEventListener("click", (e) => { if (e.target.closest("[data-close], a")) toc.close(); });
+
+function bindCallouts(root) {
+  const on = { hover: null, focus: null, pin: null };
+  const set = (key, value) => {
+    on[key] = value;
+    root.querySelectorAll(".callout").forEach((c) => c.toggleAttribute("data-on", Object.values(on).includes(c.closest("[data-i]").dataset.i)));
+  };
+  root.querySelectorAll("[data-i]").forEach((el) => {
+    const i = el.dataset.i;
+    el.addEventListener("pointerenter", () => set("hover", i));
+    el.addEventListener("pointerleave", () => set("hover", null));
+    if (!el.matches(".callout")) return;
+    el.addEventListener("focus", () => set("focus", el.matches(":focus-visible") ? i : null));
+    el.addEventListener("blur", () => set("focus", null));
+    el.addEventListener("click", () => set("pin", on.pin === i ? null : i));
+  });
+}
 
 const pdp = document.getElementById("pdp");
-const pdpBody = document.getElementById("pdpBody");
-
-function openProduct(id) {
-  const p = PRODUCTS.find((x) => x.id === id);
-  pdpBody.innerHTML = `
-    <div class="pdp-grid">
-      <div class="pdp-media">
-        <div class="pdp-figure">
-          <img src="${p.img}" alt="${p.name}" />
-          ${p.hotspots.map(([x, y], i) => `<button class="hs" style="left:${x}%;top:${y}%" data-i="${i}" aria-expanded="false" aria-label="디테일 ${i + 1}">${i + 1}</button>`).join("")}
-        </div>
-        <div class="hs-pop" hidden></div>
-      </div>
-      <div class="pdp-info">
-        <span class="code">${p.code}</span>
-        <h2>${p.name}</h2>
-        <p class="price">₩${p.price} <small style="color:#999;font-size:12px">(콘셉트 가격)</small></p>
-        <p class="desc">${p.desc}</p>
-        ${tempBar(p.temp)}
-        <h4>Key numbers</h4>
-        <div class="kpis">${p.kpis.map(([k, v, u, m]) => `
-          <div class="kpi"><small>${k}</small><strong>${v}<u>${u}</u></strong><div class="meter"><i style="width:${m * 100}%"></i></div></div>`).join("")}
-        </div>
-        <h4>Specification</h4>
-        <table class="spec-table">${p.specs.map(([k, v, n]) => `<tr><th>${k}</th><td>${v}<small>${n}</small></td></tr>`).join("")}</table>
-        <h4>Construction</h4>
-        <div class="tech">${p.tech.map(([k, v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}</div>
-        <h4>When to wear</h4>
-        <div class="use">${p.use.map(([k, v, no]) => `<div class="${no ? "no" : ""}"><b>${k}</b>${v}</div>`).join("")}</div>
-      </div>
-    </div>`;
-  const pop = pdpBody.querySelector(".hs-pop");
-  pdpBody.querySelectorAll(".hs").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      pdpBody.querySelectorAll(".hs").forEach((b) => b.setAttribute("aria-expanded", "false"));
-      if (open) { pop.hidden = true; return; }
-      const [, , title, text] = p.hotspots[btn.dataset.i];
-      btn.setAttribute("aria-expanded", "true");
-      pop.innerHTML = `<b>${btn.dataset.i * 1 + 1} · ${title}</b>${text}`;
-      pop.hidden = false;
-    });
-  });
-  pdp.showModal();
-  pdp.scrollTop = 0;
+const ids = PRODUCTS.map((p) => p.id);
+function route() {
+  const i = ids.indexOf(location.hash.slice(1));
+  if (i >= 0) {
+    document.getElementById("pdpBody").innerHTML = pdpBody(PRODUCTS[i]);
+    document.getElementById("pdpPos").textContent = `${String(i + 1).padStart(2, "0")} / ${String(ids.length).padStart(2, "0")}`;
+    bindCallouts(pdp);
+    if (!pdp.open) pdp.showModal();
+    pdp.scrollTop = 0;
+  } else if (pdp.open) {
+    pdp.close();
+  }
 }
-
-document.getElementById("cards").addEventListener("click", (e) => {
-  const card = e.target.closest(".card");
-  if (card) openProduct(card.dataset.id);
+window.addEventListener("hashchange", route);
+pdp.addEventListener("close", () => { if (ids.includes(location.hash.slice(1))) location.hash = "lineup"; });
+pdp.addEventListener("click", (e) => {
+  if (e.target.closest("[data-close]")) pdp.close();
+  const step = e.target.closest("[data-step]");
+  if (step) location.hash = ids[(ids.indexOf(location.hash.slice(1)) + Number(step.dataset.step) + ids.length) % ids.length];
 });
-document.getElementById("pdpClose").addEventListener("click", () => pdp.close());
-pdp.addEventListener("click", (e) => { if (e.target === pdp) pdp.close(); });
+route();
 
-const NESCL_ITEMS = {
-  singlet: { name: "AERO 95 레이스 싱글렛", img: "assets/img/r01-singlet.webp", note: "R-01", clo: 0.08 },
-  tee: { name: "네스클 기능성 반팔 (기존 라인)", note: "NESCL", clo: 0.12 },
-  hood: { name: "THERMO GRID 185 후드슬리브", img: "assets/img/r02-hoodsleeve.webp", note: "R-02", clo: 0.42 },
-  base: { name: "롱슬리브 베이스레이어 (기존 라인)", note: "NESCL", clo: 0.25 },
-  shell: { name: "ZERO 7D 윈드쉘", img: "assets/img/r03-shell.webp", note: "R-03", clo: 0.2 },
-  tights: { name: "CARRY 8 하프타이츠", img: "assets/img/r04-tights.webp", note: "R-04", clo: 0.15 },
-  longtights: { name: "윈터 롱타이츠 (기존 라인)", note: "NESCL", clo: 0.3 },
-  gloves: { name: "장갑 · 넥워머", note: "ACC", clo: 0.1 },
-};
-const BONUS = { easy: 0, tempo: 5, race: 9 };
-
-function recommend() {
-  const t = +document.getElementById("temp").value;
-  const w = +document.getElementById("wind").value;
-  const intensity = document.querySelector('input[name="intensity"]:checked').value;
-  const rain = document.getElementById("rain").checked;
-  document.getElementById("tempOut").textContent = `${t}°C`;
-  document.getElementById("windOut").textContent = `${w} m/s`;
-
-  const feels = Math.round(t - w * 1.2 - (rain ? 3 : 0));
-  const eff = feels + BONUS[intensity];
-  let kit;
-  if (eff >= 18) kit = ["singlet", "tights"];
-  else if (eff >= 12) kit = ["tee", "tights"];
-  else if (eff >= 6) kit = ["base", "tights"];
-  else if (eff >= 0) kit = ["hood", "tights"];
-  else if (eff >= -6) kit = ["hood", "shell", "longtights"];
-  else kit = ["base", "hood", "shell", "longtights", "gloves"];
-  if ((w >= 6 || rain) && !kit.includes("shell") && eff < 14) kit.splice(1, 0, "shell");
-  if (intensity === "race" && eff >= 12) kit[0] = "singlet";
-
-  const items = kit.map((k) => NESCL_ITEMS[k]);
-  const clo = items.reduce((s, i) => s + i.clo, 0).toFixed(2);
-  const tips = [];
-  if (intensity === "race" && t < 10) tips.push("출발 대기 동안은 ZERO 7D 쉘을 입고, 5km 지점에서 접어 포켓에 넣으세요.");
-  if (rain) tips.push("비 예보: 쉘은 발수(1,500mm)이지 방수가 아닙니다. 1시간 이상 폭우면 체온 관리에 주의.");
-  if (eff >= 18) tips.push("체감 고온 구간: 흰색·고CFM 상의와 급수 계획이 기록을 지킵니다.");
-  if (!tips.length) tips.push("처음 1km가 살짝 춥게 느껴지면 맞게 입은 겁니다.");
-
-  document.getElementById("layerResult").innerHTML = `
-    <div class="lr-head">
-      <div><small>체감 기온</small><strong>${feels}°C</strong></div>
-      <div><small>운동 중 체감</small><strong class="hot">${eff}°C</strong></div>
-      <div><small>추천 총 보온</small><strong>${clo} CLO</strong></div>
-    </div>
-    <div class="lr-items">${items.map((i) => `
-      <div class="lr-item">
-        ${i.img ? `<img src="${i.img}" alt="" />` : `<div class="ph">${i.note}</div>`}
-        <div><b>${i.name}</b><span>${i.note === "NESCL" ? "스타일 라인과 섞어 입어도 OK" : i.note === "ACC" ? "손끝·목 보온" : "NESCL R"}</span></div>
-        <em>${i.clo.toFixed(2)} CLO</em>
-      </div>`).join("")}
-    </div>
-    <p class="lr-tip">${tips.join("<br />")}</p>`;
+const layerForm = document.getElementById("layerForm");
+function renderLayers() {
+  const { temp, wind, intensity, rain, tempOut, windOut } = layerForm.elements;
+  const t = Number(temp.value);
+  const w = Number(wind.value);
+  tempOut.innerHTML = `${num(t)}${unit("°C")}`;
+  windOut.innerHTML = `${w}${unit("m/s")}`;
+  document.getElementById("layerResult").innerHTML = layerResult(recommend(t, w, intensity.value, rain.checked));
 }
-document.getElementById("layerForm").addEventListener("input", recommend);
-recommend();
+layerForm.addEventListener("input", renderLayers);
+renderLayers();
