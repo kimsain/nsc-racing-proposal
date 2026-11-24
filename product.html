@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>NESCL R (콘셉트 목업)</title>
+<meta name="description" content="원단 수치를 공개하는 레이싱 라인 NESCL R의 제품 상세페이지를 상상해 본 비공식 콘셉트 목업입니다.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="product">
+<p class="notice" id="notice"></p>
+<header class="hdr" id="hdr"></header>
+
+<main>
+  <div class="wrap">
+    <nav class="crumb" aria-label="위치" id="crumb"></nav>
+    <div class="pdp">
+      <div class="gallery" id="gallery"></div>
+      <div class="buy">
+        <div class="buy-in">
+          <div class="buy-head" id="buyHead"></div>
+          <div class="kvs" id="keyTags"></div>
+          <div class="ixs" id="indexRows"></div>
+          <div class="opt" id="color"></div>
+          <div class="opt">
+            <p class="opt-h"><span>사이즈</span><button type="button" class="link" data-guide>사이즈 가이드</button></p>
+            <div class="sizes" role="group" aria-label="사이즈" id="sizes"></div>
+          </div>
+          <button type="button" class="btn" id="addBtn" data-add>장바구니 담기</button>
+          <ul class="buy-meta" id="buyMeta"></ul>
+        </div>
+      </div>
+    </div>
+
+    <section class="sec" id="tech" aria-labelledby="techH">
+      <div class="sec-h"><h2 id="techH">기술</h2><p>지수 묶음을 고르면 그 값을 정하는 측정 항목과 부위가 나옵니다.</p></div>
+      <div class="tech" id="techPanel"></div>
+    </section>
+
+    <section class="sec" id="spec" aria-labelledby="specH">
+      <div class="sec-h"><h2 id="specH">스펙</h2><p>값을 누르면 측정 방법과 네 제품 비교가 열립니다.</p></div>
+      <div class="spec-table" id="specTable"></div>
+    </section>
+
+    <section class="sec" id="temp" aria-labelledby="tempH">
+      <div class="sec-h"><h2 id="tempH">권장 기온과 함께 입기</h2></div>
+      <div id="tempSec"></div>
+      <div class="pair">
+        <div class="chips" id="pairChips" role="group" aria-label="기온 예시"></div>
+        <ul class="pair-list" id="pairList"></ul>
+        <p class="pair-note">템포런 강도 기준 조합입니다. R 라인이 없는 자리는 NESCL 스타일 라인 제품으로 채웠습니다.</p>
+        <button type="button" class="btn-line" id="pairAdd" data-pair-add>R 제품 모두 담기</button>
+      </div>
+    </section>
+
+    <section class="sec" id="compare" aria-labelledby="cmpH">
+      <div class="sec-h"><h2 id="cmpH">다른 R 제품과 비교</h2>
+        <label class="visually-hidden" for="compareSelect">비교할 제품</label>
+        <select id="compareSelect"></select>
+      </div>
+      <div class="cmp-cols" id="compareCols"></div>
+    </section>
+
+    <section class="sec" id="fit" aria-labelledby="fitH">
+      <div class="sec-h"><h2 id="fitH">핏과 실측</h2></div>
+      <div class="fit">
+        <div id="fitHead"></div>
+        <div class="measure-wrap"><table class="measure" id="measure"></table></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="buybar" id="buyBar" inert>
+  <div class="wrap buybar-in">
+    <p class="bb-thumb" id="barThumb"></p>
+    <p class="bb-size" id="barSize"></p>
+    <button type="button" class="btn" data-add>장바구니 담기</button>
+  </div>
+</div>
+
+<footer class="foot" id="foot"></footer>
+
+<dialog class="drawer" id="specDrawer" aria-labelledby="specTitle"><div class="drawer-in" id="specBody"></div></dialog>
+<dialog class="drawer" id="cartDrawer" aria-labelledby="cartTitle"><div class="drawer-in" id="cartBody"></div></dialog>
+<dialog class="drawer" id="guideDrawer" aria-labelledby="guideTitle"><div class="drawer-in" id="guideBody"></div></dialog>
+
+<script src="data.js"></script>
+<script src="logic.js"></script>
+<script src="anim.js"></script>
+<script src="anim/gsm.js"></script>
+<script src="anim/weight.js"></script>
+<script src="anim/cfm.js"></script>
+<script src="anim/mvtr.js"></script>
+<script src="anim/ret.js"></script>
+<script src="anim/clo.js"></script>
+<script src="anim/dry.js"></script>
+<script src="anim/stretch.js"></script>
+<script src="anim/temp.js"></script>
+<script src="anim/compression.js"></script>
+<script src="anim/repel.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

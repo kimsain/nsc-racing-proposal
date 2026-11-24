@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>scene preview</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  body { margin: 16px; font: 13px "Pretendard Variable", sans-serif; background: #fff; }
+  .row { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-start; }
+  .row > p { width: 90px; margin: 0; font-weight: 700; }
+  figure { margin: 0; width: 280px; }
+  figure svg { width: 280px; height: 210px; display: block; }
+  figcaption { color: #5c5a57; }
+  #err { color: #c00; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<pre id="err"></pre>
+<div id="out"></div>
+<script src="../data.js"></script>
+<script src="../logic.js"></script>
+<script src="../anim.js"></script>
+<script>
+/* 사용법: scripts/scene-preview.html?key=cfm[&times=0.5,1.5,2.5,2.9]
+   그 스펙을 가진 제품마다(그리고 제품 없음) 한 줄씩, 지정한 시각의 정지 화면을 나란히 그립니다. */
+const q = new URLSearchParams(location.search);
+const key = q.get("key");
+window.addEventListener("error", (e) => { document.getElementById("err").textContent += `${e.message} (${e.filename}:${e.lineno})\n`; });
+const s = document.createElement("script");
+s.src = `../anim/${key}.js`;
+s.onload = () => {
+  const make = SCENES[key];
+  const probe = make(document.createElementNS(SVGNS, "svg"), { p: null, products: PRODUCTS, size: "M" });
+  const times = (q.get("times") || [0.15, 0.4, 0.65, 0.9].map((k) => (k * probe.duration).toFixed(2)).join(",")).split(",").map(Number);
+  const rows = [null, ...PRODUCTS.filter((p) => p.specKeys.includes(key))];
+  const out = document.getElementById("out");
+  out.insertAdjacentHTML("beforeend", `<p>${key} · duration ${probe.duration}s · reduced-motion frame is the last column</p>`);
+  for (const p of rows) {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `<p>${p ? p.code : "제품 없음"}</p>`;
+    for (const t of [...times, probe.duration * 0.999]) {
+      const fig = document.createElement("figure");
+      const svg = el(fig, "svg", { viewBox: "0 0 400 300" });
+      el(svg, "rect", { width: 400, height: 300, fill: PHOTO });
+      const scene = make(svg, { p, products: PRODUCTS, size: "M" });
+      scene.frame(t);
+      fig.insertAdjacentHTML("beforeend", `<figcaption>t = ${t.toFixed(2)}s</figcaption>`);
+      row.appendChild(fig);
+    }
+    out.appendChild(row);
+  }
+};
+s.onerror = () => { document.getElementById("err").textContent = `anim/${key}.js not found`; };
+document.body.appendChild(s);
+</script>
+</body>
+</html>

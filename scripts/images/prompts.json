@@ -1,0 +1,109 @@
+{
+  "style": "Studio product photograph on seamless neutral light-gray paper (#F2F2F2, no warm or cool cast), one large softbox from upper left, soft natural contact shadow, neutral color grade, matte black technical running fabric, a single signal-orange (#FF4A12) accent only, crisp realistic textile detail, no logos, no brand marks, no text, no numbers, no people, no faces.",
+  "assets": {
+    "style-anchor": {
+      "size": "1024x1024",
+      "prompt": "Top-down view of a single circular fabric test specimen, about 8 cm across, cut with a pinked zigzag edge, made of black laser-perforated knit mesh with one orange thread crossing it, lying flat and centered with generous empty space around it."
+    },
+    "r01-singlet": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin back view of a black racerback racing singlet, floating and centered with an even margin. A field of tiny laser-cut perforations between the shoulder blades that fades out toward the waist, clean bonded armholes and bonded hem with no visible stitching, one thin orange bonded tape running down the left side seam. Lightweight single-jersey mesh with a slight sheen, natural drape, vertical 4:5 composition."
+    },
+    "r02-hoodsleeve": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin front three-quarter view of a black slim-fit hooded long-sleeve running mid-layer. Grid fleece texture faintly visible at the open hood lining, a generic charcoal and smoke-gray tie-dye marbled panel across the shoulders joined with flatlock seams, thumbholes at the cuffs, one small blank orange reflective tab at the hem. Floating and centered, vertical 4:5 composition."
+    },
+    "r03-shell": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin front view of an ultralight black half-zip running wind shell with no hood, made of thin semi-translucent 7-denier ripstop nylon with a faint grid and soft crinkles. Short orange zipper pull on the half zip, slim vertical laser-cut vent slits along the chest yoke, a small chest pocket, elastic-bound cuffs. Floating and centered, vertical 4:5 composition."
+    },
+    "r04-tights": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin side three-quarter view of black compression half tights for marathon running, mid-thigh length. A wide seamless 9 cm waistband with a mesh pocket belt around it, one stretch mesh pocket on the outer thigh, orange drawcord tips at the waist, a dotted silicone gripper at the leg hem, flatlock seams. Floating and centered, vertical 4:5 composition."
+    },
+    "swatch-two-track": {
+      "size": "1536x1024",
+      "ref": true,
+      "prompt": "Top-down view of two equal circular fabric test specimens with pinked zigzag edges lying side by side with generous space between them. Left: soft cotton-feel knit with a generic charcoal and smoke-gray tie-dye marbling. Right: black laser-perforated technical mesh with a thin orange bonded tape along one edge. Horizontal 3:2 composition."
+    },
+    "transfer-tiedye-panel": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Close-up macro of the shoulder of a hooded running mid-layer: a generic charcoal tie-dye marbled panel joined by a neat flatlock seam to black grid fleece, a tiny blank orange woven tag stitched at the seam. Same softbox light from upper left, but on a near-black backdrop (#111111) instead of gray paper. Vertical 4:5 composition, shallow depth of field."
+    },
+    "lab-permeability": {
+      "size": "1536x1024",
+      "ref": true,
+      "prompt": "Sparse, clean textile testing bench in a bright lab with a warm light-gray wall. Two hands in black nitrile gloves clamp a round black mesh fabric specimen into a compact air permeability tester. The instrument display is dark and blank with no digits. Only the hands are visible, no face. Horizontal 3:2 composition."
+    },
+    "r01-front": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin front view of the same black racerback racing singlet, bonded neckline and armholes with no visible stitching, thin orange bonded tape on the left side seam, floating and centered, vertical 4:5 composition."
+    },
+    "r01-perf": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Extreme macro of black laser-perforated knit mesh, tiny round holes in a gradient field, soft light passing through the holes from behind, shallow depth of field, vertical 4:5 composition."
+    },
+    "r01-hem": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Macro of the inside of a black singlet hem turned up, bonded edge with a row of small silicone dots and four small fabric loops for a race bib, no safety pins, vertical 4:5 composition."
+    },
+    "r02-back": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin back view of the same black slim hooded long-sleeve running mid-layer, generic charcoal tie-dye panel across the shoulders, flatlock seams placed away from backpack strap lines, floating and centered, vertical 4:5 composition."
+    },
+    "r02-cuff": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Macro of a black grid-fleece sleeve cuff with a thumbhole and a 4 cm hand-covering extension, inner grid texture visible at the folded edge, vertical 4:5 composition."
+    },
+    "r02-swatch": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Top-down view of a single circular 8 cm fabric test specimen with pinked zigzag edge, black knit with a raised grid fleece back shown by a folded-over corner, centered with generous empty space, vertical 4:5 composition."
+    },
+    "r03-back": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin back view of the same ultralight black half-zip wind shell with no hood, semi-translucent 7-denier ripstop with a faint grid and soft crinkles, slim laser-cut vent slits across the upper back, floating and centered, vertical 4:5 composition."
+    },
+    "r03-packed": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "The same black ultralight wind shell packed into its own small chest pocket, a compact 10 by 8 by 5 cm soft rectangle with a short orange zipper pull, standing on the floor with a soft contact shadow, vertical 4:5 composition."
+    },
+    "r03-swatch": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Top-down view of a single circular 8 cm specimen of thin black ripstop nylon with pinked zigzag edge, several round water beads sitting on the surface without soaking in, centered with generous empty space, vertical 4:5 composition."
+    },
+    "r04-side": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Invisible ghost-mannequin opposite side three-quarter view of the same black mid-thigh compression half tights, wide seamless waistband with a mesh pocket belt, one stretch mesh thigh pocket, orange drawcord tips, floating and centered, vertical 4:5 composition."
+    },
+    "r04-pocket": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Macro of the back of a black seamless waistband with a stretch mesh pocket belt holding six plain unlabeled energy gel sachets in a neat row, no printing on the sachets, vertical 4:5 composition."
+    },
+    "r04-swatch": {
+      "size": "1024x1280",
+      "ref": true,
+      "prompt": "Top-down view of a single circular 8 cm specimen of dense matte black compression knit with pinked zigzag edge, slightly stretched by two small clips at opposite sides, centered with generous empty space, vertical 4:5 composition."
+    },
+    "collection-specimens": {
+      "size": "1536x1024",
+      "ref": true,
+      "prompt": "Four circular 8 cm fabric test specimens with pinked zigzag edges in one evenly spaced horizontal row, top-down: black perforated mesh, black grid fleece, thin black ripstop, dense black compression knit, wide panoramic composition with generous empty space above and below."
+    }
+  }
+}

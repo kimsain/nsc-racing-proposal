@@ -4,3 +4,5 @@ generated-images/
 
 .vercel
 .env*
+scripts/images/raw/
+scripts/images/backup-*/
